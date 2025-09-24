@@ -118,6 +118,7 @@ export default function Step1Slide1({ onNext, onWebsiteSubmit }) {
     setTimeout(() => setCurrentState("submitted"), 300);
 
     onWebsiteSubmit?.(site.trim());
+    try { localStorage.setItem('websiteData', JSON.stringify({ site: site.trim() })); } catch {}
     setSite("");
   };
 
