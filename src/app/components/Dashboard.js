@@ -1317,7 +1317,7 @@ export default function Dashboard() {
         </p>
 
         <div className="overflow-hidden rounded-[16px] border border-[#E7EAF0] bg-[var(--input)] shadow-sm">
-          <div className="hidden md:grid grid-cols-[1.6fr_1.4fr_1.4fr_1.5fr_1.3fr_1fr_1fr_1.8fr] items-center px-4 py-3 text-[12px] font-semibold text-[#4B5563] bg-[#F8FAFC] text-center">
+          <div className="hidden md:grid grid-cols-[2fr_1.4fr_1.4fr_1.5fr_1.3fr_1fr_1fr_1.8fr] items-center px-4 py-3 text-[12px] font-semibold text-[#4B5563] bg-[#F8FAFC] text-center">
             <div className="text-left">Keywords</div>
             <div>Type <span className="opacity-50">↑↓</span></div>
             <div>Search Volume</div>
@@ -1338,7 +1338,7 @@ export default function Dashboard() {
               { keyword: "How to fix slow Wi-Fi", type: "Transactional", volume: 7032, difficulty: 68 },
               { keyword: "How to fix slow Wi-Fi", type: "Informational", volume: 7032, difficulty: 48 },
             ]).map((row, i) => (
-              <li key={i} className="grid grid-cols-1 md:grid-cols-[1.6fr_1.4fr_1.4fr_1.5fr_1.3fr_1fr_1fr_1.8fr] items-center gap-3 px-4 py-3 text-[13px] hover:bg-[#FAFBFD] text-center">
+              <li key={i} className="grid grid-cols-1 md:grid-cols-[2fr_1.4fr_1.4fr_1.5fr_1.3fr_1fr_1fr_1.8fr] items-center gap-3 px-4 py-3 text-[13px] hover:bg-[#FAFBFD] text-center">
                 <div className="flex items-center gap-2 text-[#2B3040] justify-start">
                   <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#F3F4F6] text-[#6B7280]"><Wifi size={14} /></span>
                   <span className="truncate">{row.keyword}</span>
