@@ -991,7 +991,7 @@ export default function Dashboard() {
               <div className="text-[32px] font-semibold leading-none text-[#151824] tabular-nums">
                 {otValue >= 1000 ? (otValue / 1000).toFixed(1) + "k" : Math.round(otValue)}
               </div>
-              <div className="ml-1 inline-flex items-center gap-1 rounded-full bg-[#EAF8F1] px-2 py-0.5 text=[11px] font-medium text-[#178A5D]">
+              <div className="ml-1 inline-flex items-center gap-1 rounded-full bg-[#EAF8F1] px-2 py-0.5 text-[11px] font-medium text-[#178A5D]">
                 ↗︎ +{selected?.organicTraffic?.growth ?? 23}
               </div>
             </div>
@@ -1020,9 +1020,11 @@ export default function Dashboard() {
               </svg>
             </div>
 
-            <button type="button" className="mt-3 inline-flex items-center gap-1 rounded-[10px] border border-[#E7EAF0] bg-[#FAFBFD] px-3 py-2 text-[12px] font-medium text-[#566072]">
-              Connect to Google Analytics <ChevronRight size={14} />
-            </button>
+            <div className="mt-3 flex justify-end">
+              <button type="button" className="inline-flex items-center gap-1 rounded-[10px] border border-[#E7EAF0] bg-[#FAFBFD] px-3 py-2 text-[12px] font-medium text-[#566072]">
+                Connect to Google Analytics <ChevronRight size={14} />
+              </button>
+            </div>
           </div>
 
           {/* Organic Keywords */}
@@ -1315,8 +1317,8 @@ export default function Dashboard() {
         </p>
 
         <div className="overflow-hidden rounded-[16px] border border-[#E7EAF0] bg-[var(--input)] shadow-sm">
-          <div className="hidden md:grid grid-cols-[2fr_1.1fr_1.1fr_1.3fr_2fr_1fr_1fr_1fr] items-center px-4 py-3 text-[12px] font-semibold text-[#4B5563] bg-[#F8FAFC]">
-            <div>Keywords</div>
+          <div className="hidden md:grid grid-cols-[1.6fr_1.4fr_1.4fr_1.5fr_1.3fr_1fr_1fr_1.8fr] items-center px-4 py-3 text-[12px] font-semibold text-[#4B5563] bg-[#F8FAFC] text-center">
+            <div className="text-left">Keywords</div>
             <div>Type <span className="opacity-50">↑↓</span></div>
             <div>Search Volume</div>
             <div>SEO Difficulty</div>
@@ -1336,8 +1338,8 @@ export default function Dashboard() {
               { keyword: "How to fix slow Wi-Fi", type: "Transactional", volume: 7032, difficulty: 68 },
               { keyword: "How to fix slow Wi-Fi", type: "Informational", volume: 7032, difficulty: 48 },
             ]).map((row, i) => (
-              <li key={i} className="grid grid-cols-1 md:grid-cols-[2fr_1.1fr_1.1fr_1.3fr_2fr_1fr_1fr_1fr] items-center gap-3 px-4 py-3 text-[13px] hover:bg-[#FAFBFD]">
-                <div className="flex items-center gap-2 text-[#2B3040]">
+              <li key={i} className="grid grid-cols-1 md:grid-cols-[1.6fr_1.4fr_1.4fr_1.5fr_1.3fr_1fr_1fr_1.8fr] items-center gap-3 px-4 py-3 text-[13px] hover:bg-[#FAFBFD] text-center">
+                <div className="flex items-center gap-2 text-[#2B3040] justify-start">
                   <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#F3F4F6] text-[#6B7280]"><Wifi size={14} /></span>
                   <span className="truncate">{row.keyword}</span>
                 </div>
@@ -1348,14 +1350,14 @@ export default function Dashboard() {
                   </span>
                 </div>
                 <div className="tabular-nums text-[#2B3040]">{Number(row.volume).toLocaleString()}</div>
-                <div className="flex items-center gap-2 text-[#2B3040]">
+                <div className="flex items-center gap-2 text-[#2B3040] justify-start">
                   <span className="tabular-nums">{row.difficulty}%</span>
                   <DifficultyBar value={row.difficulty} progress={seoTableProg} />
                 </div>
-                <div className="text-[#2B3040] truncate">{row.suggested ?? "—"}</div>
-                <div><button className="inline-flex items-center justify-center rounded-full border border-[#BBD5FF] bg-[#F3F7FF] px-4 py-1.5 text-[12px] font-semibold text-[#3178C6]">Generate</button></div>
-                <div><button className="inline-flex items-center justify-center rounded-full border border-[#BBD5FF] bg-[#F3F7FF] px-4 py-1.5 text-[12px] font-semibold text-[#3178C6]">Generate</button></div>
-                <div className="flex items-center gap-3 text-[#6B7280]">
+                <div className="text-[#2B3040] truncate text-center">{row.suggested ?? "—"}</div>
+                <div className="flex justify-center"><button className="inline-flex items-center justify-center rounded-full border border-[#BBD5FF] bg-[#F3F7FF] px-4 py-1.5 text-[12px] font-semibold text-[#3178C6]">Generate</button></div>
+                <div className="flex justify-center"><button className="inline-flex items-center justify-center rounded-full border border-[#BBD5FF] bg-[#F3F7FF] px-4 py-1.5 text-[12px] font-semibold text-[#3178C6]">Generate</button></div>
+                <div className="flex items-center justify-center gap-3 text-[#6B7280]">
                   <span className="inline-flex items-center gap-1 rounded-md border border-[#E7EAF0] bg-[#F6F8FB] px-2 py-0.5 text-[11px]">{row.preference ?? "—"}</span>
                   <span className="flex items-center gap-2 text-[#A1A7B3]">
                     <ThumbsUp size={16} className="hover:text-[#6B7280] cursor-pointer" />
