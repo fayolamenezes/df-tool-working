@@ -26,6 +26,15 @@ function normalizeDomain(input = "") {
   }
 }
 
+
+/** Compact number formatter for backlinks and other big counts */
+function formatCompactNumber(n) {
+  const v = Number(n) || 0;
+  if (v >= 1_000_000_000) return (v / 1_000_000_000).toFixed(1) + "B";
+  if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + "M";
+  if (v >= 1_000) return (v / 1_000).toFixed(1) + "k";
+  return Math.round(v).toString();
+}
 /** Heuristics to retrieve the site the user entered during onboarding */
 function getSiteFromStorageOrQuery(searchParams) {
   // 1) Highest priority: ?site=
@@ -64,7 +73,16 @@ function getSiteFromStorageOrQuery(searchParams) {
 function mapRowToSchema(row) {
   if (!row || typeof row !== "object") return null;
   // Basic safe getters
-  const n = (x, d=undefined) => (typeof x === "number" ? x : d);
+  // replace your current `n` with this:
+  const n = (x, d = undefined) => {
+    if (typeof x === "number" && Number.isFinite(x)) return x;
+    if (typeof x === "string") {
+      const v = Number(x.replace(/[, ]/g, ""));
+      if (Number.isFinite(v)) return v;
+    }
+    return d;
+  };
+
   const s = (x, d=undefined) => (typeof x === "string" ? x : d);
 
   // Build "new opportunities" table rows from numbered fields
@@ -75,7 +93,9 @@ function mapRowToSchema(row) {
     const vol = row[`NewOp_SearchVol_${i}`];
     const diff = row[`NewOp_SEODiff_${i}`];
     if (kw && typ && (typeof vol === "number") && (typeof diff === "number")) {
-      seoRows.push({ keyword: String(kw), type: String(typ), volume: vol, difficulty: diff });
+      const sugg = row[`NewOp_Suggested_${i}`];
+      const pref = row[`NewOp_Preference_${i}`];
+      seoRows.push({ keyword: String(kw), type: String(typ), volume: vol, difficulty: diff, suggested: sugg ? String(sugg) : undefined, preference: pref ? String(pref) : undefined });
     }
   }
 
@@ -89,7 +109,10 @@ function mapRowToSchema(row) {
     dateAnalyzed: s(row["Date_Analyzed"], ""),
     // Off-page
     domainRating: n(row["Domain_Rating"], undefined),
+    industryAvgDR: n(row["Industry_Average_DR"], undefined),
     trustBar: n(row["High_Quality_Backlinks_Percent"], undefined),
+    medQuality: n(row["Medium_Quality_Backlinks_Percent"], undefined),
+    lowQuality: n(row["Low_Quality_Backlinks_Percent"], undefined),
     referringDomains: n(row["Referring_Domains"], undefined),
     backlinks: n(row["Total_Backlinks"], undefined),
     dofollowPct: n(row["DoFollow_Links_Percent"], undefined),
@@ -127,9 +150,19 @@ function mapRowToSchema(row) {
     serp: {
       coveragePercent: n(row["SERP_Feature_Coverage_Percent"], undefined),
       featuredSnippets: n(row["Featured_Snippets_Count"], undefined),
+      peopleAlsoAsk: n(row["People_Also_Ask_Count"], undefined),
       imagePack: n(row["Image_Pack_Count"], undefined),
       videoResults: n(row["Video_Results_Count"], undefined),
       knowledgePanel: n(row["Knowledge_Panel_Count"], undefined),
+    },
+    // Issue/opportunity cards (site-level)
+    issues: {
+      critical: n(row["Critical_Issues_Count"], undefined),
+      warning: n(row["Warning_Issues_Count"], undefined),
+      recommendations: n(row["Recommendations_Count"], undefined),
+      contentOpps: n(row["Content_Opportunities_Count"], undefined),
+      criticalGrowth: n(row["Critical_Issues_Growth_Percent"], undefined),
+      warningGrowth: n(row["Warning_Issues_Growth_Percent"], undefined),
     },
     // New SEO opp table
     seoRows
@@ -177,17 +210,27 @@ export default function Dashboard() {
   const DR_BAR    = selected?.trustBar ?? 72;
 
   const RD_TARGET = selected?.referringDomains ?? 63400;
-  const TB_TARGET = (selected?.backlinks ?? (26.1 * 1_000_000_000)) / 1_000_000_000;
+  // Normalize High/Medium/Low quality percentages so they always sum to 100
+  const qualitySplit = useMemo(() => {
+    const h = selected?.trustBar ?? 45;
+    const m = selected?.medQuality ?? 35;
+    const l = selected?.lowQuality ?? 20;
+    const sum = (h ?? 0) + (m ?? 0) + (l ?? 0);
+    if (!sum || sum === 100) return { h, m, l };
+    return { h: (h / sum) * 100, m: (m / sum) * 100, l: (l / sum) * 100 };
+  }, [selected?.trustBar, selected?.medQuality, selected?.lowQuality]);
+
+  const TB_TARGET = selected?.backlinks ?? (26.1 * 1_000_000_000);
 
   const SH_SCORE  = selected?.siteHealth ?? 100.0;
   const SH_PAGES  = selected?.pagesScanned ?? 2100;
   const SH_REDIRECT = selected?.redirects ?? 89;
   const SH_BROKEN = selected?.broken ?? 15;
 
-  // CWV: your dataset has *_Score (0-100). The UI expects times; keep existing demo times if no times provided.
-  const LCP_TARGET = 2.1;
-  const INP_TARGET = 180;
-  const CLS_TARGET = 0.08;
+  // CWV: drive tiles from dataset; fall back to demos if missing
+  const LCP_TARGET = selected?.cwvScores?.LCP_Score ?? 2.1;   // seconds
+  const INP_TARGET = selected?.cwvScores?.INP_Score ?? 180;   // ms
+  const CLS_TARGET = selected?.cwvScores?.CLS_Score ?? 0.08;  // unitless
 
   const PS_DESKTOP = selected?.pageSpeed?.desktop ?? 95;
   const PS_MOBILE  = selected?.pageSpeed?.mobile ?? 87;
@@ -212,7 +255,7 @@ export default function Dashboard() {
 
   const serpCountsMemo = useMemo(() => ([
     selected?.serp?.featuredSnippets ?? 23,
-    156, // PAA not in dataset → demo
+    selected?.serp?.peopleAlsoAsk ?? 156,
     selected?.serp?.imagePack ?? 89,
     selected?.serp?.videoResults ?? 34,
     selected?.serp?.knowledgePanel ?? 12,
@@ -409,19 +452,24 @@ export default function Dashboard() {
 
   const [oppCounts, setOppCounts] = useState([0, 0, 0, 0]);
   useEffect(() => {
-    const TARGETS = [274, 883, 77, 5];
+    const targets = [
+      selected?.issues?.critical ?? 274,
+      selected?.issues?.warning ?? 883,
+      selected?.issues?.recommendations ?? 77,
+      selected?.issues?.contentOpps ?? 5,
+    ];
     const DURATION = 900;
     const start = performance.now();
     let raf;
     const tick = (now) => {
       const t = Math.min(1, (now - start) / DURATION);
       const ease = 1 - Math.pow(1 - t, 3);
-      setOppCounts(TARGETS.map((n) => Math.max(0, Math.round(n * ease))));
+      setOppCounts(targets.map((n) => Math.max(0, Math.round((n ?? 0) * ease))));
       if (t < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [selected]);
 
   const [oppCardsProgress, setOppCardsProgress] = useState(0);
   useLayoutEffect(() => {
@@ -692,21 +740,21 @@ export default function Dashboard() {
               <div className="relative">
                 <div className="h-2 w-full rounded-full bg-[#EEF2F7]" />
                 <div className="absolute inset-0 flex h-2 items-stretch gap-[6px] px-[2px]">
-                  <div className="h-2 self-center rounded-full bg-[#1CC88A]" style={{ width: `${(selected?.trustBar ?? 45) * rdP}%` }} />
-                  <div className="h-2 self-center rounded-full bg-[#F59E0B]" style={{ width: `${(selected?.medQuality ?? 35) * rdP}%` }} />
-                  <div className="h-2 self-center rounded-full bg-[#EF4444]" style={{ width: `${(selected?.lowQuality ?? 20) * rdP}%` }} />
+                  <div className="h-2 self-center rounded-full bg-[#1CC88A]" style={{ width: `${(qualitySplit.h ?? 45) * rdP}%` }} />
+                  <div className="h-2 self-center rounded-full bg-[#F59E0B]" style={{ width: `${(qualitySplit.m ?? 35) * rdP}%` }} />
+                  <div className="h-2 self-center rounded-full bg-[#EF4444]" style={{ width: `${(qualitySplit.l ?? 20) * rdP}%` }} />
                 </div>
               </div>
 
               <div className="mt-3 flex flex-wrap items-center gap-6 text-[11px] text-[#8D96A8]">
                 <span className="flex items-center gap-2">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#1CC88A]" /> High: {selected?.trustBar ?? 45}%
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#1CC88A]" /> High: {(qualitySplit.h ?? 45).toFixed(0)}%
                 </span>
                 <span className="flex items-center gap-2">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#F59E0B]" /> Medium: {selected?.medQuality ?? 35}%
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#F59E0B]" /> Medium: {(qualitySplit.m ?? 35).toFixed(0)}%
                 </span>
                 <span className="flex items-center gap-2">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#EF4444]" /> Low: {selected?.lowQuality ?? 20}%
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#EF4444]" /> Low: {(qualitySplit.l ?? 20).toFixed(0)}%
                 </span>
               </div>
             </div>
@@ -731,7 +779,7 @@ export default function Dashboard() {
 
             <div className="mt-3 flex items-end gap-2">
               <div className="text-[32px] font-semibold leading-none text-[#151824] tabular-nums">
-                {tbValue.toFixed(1)}B
+                {formatCompactNumber(tbValue)}
               </div>
               <div className="ml-auto text-[12px] font-medium text-[#1BA97A]">↗︎ +8.4%</div>
             </div>
@@ -879,8 +927,8 @@ export default function Dashboard() {
                   <span className="font-medium text-[#2B3040]">CLS</span>
                   <span className="ml-1 rounded-full bg-[#EAF8F1] px-2 py-0.5 text-[10px] font-medium text-[#178A5D]">Good</span>
                 </div>
-                <div className="text-[22px] font-semibold leading-none text-[#151824] tabular-nums">{cls.toFixed(2)}ms</div>
-                <div className="mt-1 text-[11px] text-[#8D96A8]">&lt; 0.1ms</div>
+                <div className="text-[22px] font-semibold leading-none text-[#151824] tabular-nums">{cls.toFixed(2)}</div>
+                <div className="mt-1 text-[11px] text-[#8D96A8]">&lt; 0.1</div>
               </div>
             </div>
 
@@ -1216,7 +1264,7 @@ export default function Dashboard() {
               <div className="leading-tight">
                 <div className="text-[11px] text-[#6B7280]">Critical Issue</div>
                 <div className="mt-0.5 text-[20px] font-extrabold leading-none text-[#0F172A] tabular-nums">{oppCounts[0]}</div>
-                <div className="mt-1 text-[11px] font-medium text-[#DC2626] whitespace-nowrap">32% more since last month</div>
+                <div className="mt-1 text-[11px] font-medium text-[#DC2626] whitespace-nowrap">{(selected?.issues?.criticalGrowth ?? 32)}% more since last month</div>
               </div>
             </div>
             <button className="ml-4 inline-flex items-center gap-1 text-[11px] font-medium text-[#8D96A8] shrink-0 whitespace-nowrap">Fix Now <ChevronRight size={12} /></button>
@@ -1228,7 +1276,7 @@ export default function Dashboard() {
               <div className="leading-tight">
                 <div className="text-[11px] text-[#6B7280]">Waring Issue</div>
                 <div className="mt-0.5 text-[20px] font-extrabold leading-none text-[#0F172A] tabular-nums">{oppCounts[1]}</div>
-                <div className="mt-1 text-[11px] font-medium text-[#DC2626] whitespace-nowrap">32% more since last month</div>
+                <div className="mt-1 text-[11px] font-medium text-[#DC2626] whitespace-nowrap">{(selected?.issues?.warningGrowth ?? 32)}% more since last month</div>
               </div>
             </div>
             <button className="ml-4 inline-flex items-center gap-1 text-[11px] font-medium text-[#8D96A8] shrink-0 whitespace-nowrap">Fix Now <ChevronRight size={12} /></button>
@@ -1304,12 +1352,15 @@ export default function Dashboard() {
                   <span className="tabular-nums">{row.difficulty}%</span>
                   <DifficultyBar value={row.difficulty} progress={seoTableProg} />
                 </div>
-                <div className="text-[#6B7280] truncate">The information shown here...</div>
+                <div className="text-[#2B3040] truncate">{row.suggested ?? "—"}</div>
                 <div><button className="inline-flex items-center justify-center rounded-full border border-[#BBD5FF] bg-[#F3F7FF] px-4 py-1.5 text-[12px] font-semibold text-[#3178C6]">Generate</button></div>
                 <div><button className="inline-flex items-center justify-center rounded-full border border-[#BBD5FF] bg-[#F3F7FF] px-4 py-1.5 text-[12px] font-semibold text-[#3178C6]">Generate</button></div>
-                <div className="flex items-center gap-3 text-[#A1A7B3]">
-                  <ThumbsUp size={16} className="hover:text-[#6B7280] cursor-pointer" />
-                  <ThumbsDown size={16} className="hover:text-[#6B7280] cursor-pointer" />
+                <div className="flex items-center gap-3 text-[#6B7280]">
+                  <span className="inline-flex items-center gap-1 rounded-md border border-[#E7EAF0] bg-[#F6F8FB] px-2 py-0.5 text-[11px]">{row.preference ?? "—"}</span>
+                  <span className="flex items-center gap-2 text-[#A1A7B3]">
+                    <ThumbsUp size={16} className="hover:text-[#6B7280] cursor-pointer" />
+                    <ThumbsDown size={16} className="hover:text-[#6B7280] cursor-pointer" />
+                  </span>
                 </div>
               </li>
             ))}
