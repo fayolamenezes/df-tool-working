@@ -142,14 +142,14 @@ export default function StepSlide3({ onNext, onBack, onLanguageLocationSubmit })
           <div ref={scrollRef} className="inner-scroll h-full w-full overflow-y-auto">
             <div className="flex flex-col items-start text-start gap-6 max-w-[820px] mx-auto">
               {/* Step label */}
-              <div className="text-gray-500 text-sm font-medium">Step - 3</div>
+              <div className="text-[var(--muted)] text-sm font-medium">Step - 3</div>
 <div className="spacer-line w-[80%] self-start h-[1px] bg-[#d45427] mt-[-1%]"></div>
               {/* Heading & copy (same scale as StepSlide2 final) */}
               <div className="space-y-4 max-w-[640px]">
-                <h1 className="text-[22px] md:text-[26px] font-bold text-gray-900">
+                <h1 className="text-[22px] md:text-[26px] font-bold text-[var(--text)]">
                   Select the languages and locations relevant to your business
                 </h1>
-                <p className="text-[15px] text-gray-700 leading-relaxed">
+                <p className="text-[15px] text-[var(--muted)] leading-relaxed">
                   Choose your language & business locations. Select at least one country to localise your analysis.
                 </p>
               </div>
@@ -160,12 +160,12 @@ export default function StepSlide3({ onNext, onBack, onLanguageLocationSubmit })
                   {addedSelections.map((s) => (
                     <div
                       key={s.id}
-                      className="bg-[var(--input)] max-w-[340px] w-full rounded-2xl shadow-sm border border-gray-200 px-6 py-4 text-left text-[15px]"
+                      className="bg-[var(--input)] max-w-[340px] w-full rounded-2xl shadow-sm border border-[var(--border)] px-6 py-4 text-left text-[15px]"
                     >
-                      <div className="text-gray-800">
+                      <div className="text-[var(--text)]">
                         <span className="font-semibold">Language:</span> {s.language}
                       </div>
-                      <div className="text-gray-800">
+                      <div className="text-[var(--text)]">
                         <span className="font-semibold">Location:</span> {s.location}
                       </div>
                     </div>
@@ -184,9 +184,9 @@ export default function StepSlide3({ onNext, onBack, onLanguageLocationSubmit })
                     <button
                       onClick={() => handleDropdownToggle("lang")}
                       type="button"
-                      className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
+                      className="w-full bg-[var(--input)] border border-[var(--border)] rounded-lg px-4 py-3 text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
                     >
-                      <span className={selectedLanguage ? "text-gray-900" : "text-gray-500"}>
+                      <span className={selectedLanguage ? "text-[var(--text)]" : "text-[var(--muted)]"}>
                         {selectedLanguage || "Select Language"}
                       </span>
                       <ChevronDown
@@ -196,13 +196,13 @@ export default function StepSlide3({ onNext, onBack, onLanguageLocationSubmit })
                     </button>
 
                     {openDropdown === "lang" && (
-                      <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 shadow-2xl max-h-64 overflow-y-auto z-20">
+                      <div className="absolute top-full left-0 right-0 bg-[var(--input)] border border-[var(--border)] rounded-lg mt-1 shadow-2xl max-h-64 overflow-y-auto z-20">
                         {languages.map((l) => (
                           <button
                             key={l}
                             onClick={() => { setSelectedLanguage(l); setOpenDropdown(null); }}
                             type="button"
-                            className="w-full text-left px-4 py-3 hover:bg-blue-50 text-gray-900 border-b border-gray-100 last:border-b-0 focus:outline-none focus:bg-blue-100 transition-colors"
+                            className="w-full text-left px-4 py-3 hover:bg-blue-50 text-[var(--text)] border-b border-[var(--border)] last:border-b-0 focus:outline-none focus:bg-blue-100 transition-colors"
                           >
                             {l}
                           </button>
@@ -219,9 +219,9 @@ export default function StepSlide3({ onNext, onBack, onLanguageLocationSubmit })
                     <button
                       onClick={() => handleDropdownToggle("loc")}
                       type="button"
-                      className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
+                      className="w-full bg-[var(--input)] border border-[var(--border)] rounded-lg px-4 py-3 text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
                     >
-                      <span className={selectedLocation ? "text-gray-900" : "text-gray-500"}>
+                      <span className={selectedLocation ? "text-[var(--text)]" : "text-[var(--muted)]"}>
                         {selectedLocation || "Select Location"}
                       </span>
                       <ChevronDown
@@ -231,13 +231,13 @@ export default function StepSlide3({ onNext, onBack, onLanguageLocationSubmit })
                     </button>
 
                     {openDropdown === "loc" && (
-                      <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 shadow-2xl max-h-64 overflow-y-auto z-20">
+                      <div className="absolute top-full left-0 right-0 bg-[var(--input)] border border-[var(--border)] rounded-lg mt-1 shadow-2xl max-h-64 overflow-y-auto z-20">
                         {locations.map((c) => (
                           <button
                             key={c}
                             onClick={() => { setSelectedLocation(c); setOpenDropdown(null); }}
                             type="button"
-                            className="w-full text-left px-4 py-3 hover:bg-blue-50 text-gray-900 border-b border-gray-100 last:border-b-0 focus:outline-none focus:bg-blue-100 transition-colors"
+                            className="w-full text-left px-4 py-3 hover:bg-blue-50 text-[var(--text)] border-b border-[var(--border)] last:border-b-0 focus:outline-none focus:bg-blue-100 transition-colors"
                           >
                             {c}
                           </button>
@@ -263,10 +263,10 @@ export default function StepSlide3({ onNext, onBack, onLanguageLocationSubmit })
               {/* Left-aligned system message (same copy/format as final StepSlide2) */}
               {showSummary && (
                 <div className="max-w-[640px] text-left self-start">
-                  <h3 className="text-[18px] font-bold text-gray-900 mb-3">
+                  <h3 className="text-[18px] font-bold text-[var(--text)] mb-3">
                     Here’s your site report — take a quick look on the Info Tab.
                   </h3>
-                  <p className="text-[15px] text-gray-600 mt-2">
+                  <p className="text-[15px] text-[var(--muted)] mt-2">
                     If not, Want to do some changes?
                   </p>
 
@@ -291,13 +291,13 @@ export default function StepSlide3({ onNext, onBack, onLanguageLocationSubmit })
 
       {/* ---------------- Bottom bar (identical styling to final StepSlide2) ---------------- */}
       <div ref={bottomBarRef} className="flex-shrink-0 bg-transparent">
-        <div className="border-t border-gray-200" />
+        <div className="border-t border-[var(--border)]" />
         <div className="mx-auto w-full max-w-[1120px] px-6 md:px-8">
           <div className="py-7 flex justify-center gap-4">
             <button
               onClick={handleBack}
               type="button"
-              className="inline-flex items-center gap-2 rounded-full bg-[image:var(--input)] px-6 py-3 text-[var(--text)] hover:bg-[var(--input)] shadow-sm border border-[#d45427]"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--input)] px-6 py-3 text-[var(--text)] hover:bg-[var(--input)] shadow-sm border border-[#d45427]"
             >
               <ArrowLeft size={16} /> Back
             </button>

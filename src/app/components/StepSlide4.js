@@ -145,14 +145,14 @@ export default function StepSlide4({ onNext, onBack, onKeywordSubmit }) {
           <div ref={scrollRef} className="inner-scroll h-full w-full overflow-y-auto">
             <div className="flex flex-col items-start text-start gap-6 max-w-[820px] mx-auto">
               {/* Step label */}
-              <div className="text-gray-500 text-sm font-medium">Step - 4</div>
+              <div className="text-[var(--muted)] text-sm font-medium">Step - 4</div>
 <div className="spacer-line w-[80%] self-start h-[1px] bg-[#d45427] mt-[-1%]"></div>
               {/* Heading + copy */}
               <div className="space-y-4 max-w-[640px]">
-                <h1 className="text-[22px] md:text-[26px] font-bold text-gray-900">
+                <h1 className="text-[22px] md:text-[26px] font-bold text-[var(--text)]">
                   Unlock high-impact keywords.
                 </h1>
-                <p className="text-[15px] text-gray-700 leading-relaxed">
+                <p className="text-[15px] text-[var(--muted)] leading-relaxed">
                   I scanned your site and found these gems.
                 </p>
               </div>
@@ -178,7 +178,7 @@ export default function StepSlide4({ onNext, onBack, onKeywordSubmit }) {
                             value={customKeyword}
                             onChange={(e) => setCustomKeyword(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            className="px-4 py-2 border border-[#d45427] rounded-xl bg-white text-gray-900 placeholder-gray-800 focus:outline-none focus:border-[#d45427] text-sm"
+                            className="px-4 py-2 border border-[#d45427] rounded-xl bg-[var(--input)] text-[var(--text)] placeholder:text-[var(--muted)] focus:outline-none focus:border-[#d45427] text-sm"
                           />
                           <button
                             onClick={handleAddCustom}
@@ -200,8 +200,8 @@ export default function StepSlide4({ onNext, onBack, onKeywordSubmit }) {
                         type="button"
                         className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all duration-200 ${
                           isSelected
-                            ? "bg-white text-gray-900 border-[#d45427]"
-                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                            ? "bg-[var(--input)] text-[var(--text)] border-[#d45427]"
+                            : "bg-[var(--input)] text-[var(--muted)] border-[var(--border)] hover:bg-[var(--border)]"
                         }`}
                       >
                         {keyword}
@@ -223,7 +223,7 @@ export default function StepSlide4({ onNext, onBack, onKeywordSubmit }) {
               {/* Selected keywords list */}
               {selectedKeywords.length > 0 && (
                 <div className="w-full max-w-[820px]">
-                  <h3 className="text-md font-medium text-gray-900 mb-4">
+                  <h3 className="text-md font-medium text-[var(--text)] mb-4">
                     Selected Keywords ({selectedKeywords.length})
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -256,10 +256,10 @@ export default function StepSlide4({ onNext, onBack, onKeywordSubmit }) {
               {/* Left-aligned system message */}
               {showSummary && (
                 <div className="max-w-[640px] text-left self-start mt-6">
-                  <h3 className="text-[18px] font-bold text-gray-900 mb-3">
+                  <h3 className="text-[18px] font-bold text-[var(--text)] mb-3">
                     Here’s your site report — take a quick look on the Info Tab.
                   </h3>
-                  <p className="text-[15px] text-gray-600 mt-2">
+                  <p className="text-[15px] text-[var(--muted)] mt-2">
                     If not, Want to do some changes?
                   </p>
 
@@ -283,13 +283,13 @@ export default function StepSlide4({ onNext, onBack, onKeywordSubmit }) {
 
       {/* Bottom bar (same styling as StepSlide2/3) */}
       <div ref={bottomBarRef} className="flex-shrink-0 bg-transparent">
-        <div className="border-t border-gray-200" />
+        <div className="border-t border-[var(--border)]" />
         <div className="mx-auto w-full max-w-[1120px] px-6 md:px-8">
           <div className="py-7 flex justify-center gap-4">
             <button
               onClick={onBack}
               type="button"
-              className="inline-flex items-center gap-2 rounded-full bg-[image:var(--input)] px-6 py-3 text-[var(--text)] hover:bg-[var(--input)] shadow-sm border border-[#d45427]"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--input)] px-6 py-3 text-[var(--text)] hover:bg-[var(--input)] shadow-sm border border-[#d45427]"
             >
               <ArrowLeft size={16} /> Back
             </button>

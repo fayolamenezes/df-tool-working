@@ -92,12 +92,12 @@ export default function Step5Slide2({
 
   // ----- Small UI helpers -------------------------------------------------------
   const Card = ({ icon, title, children }) => (
-    <div className="rounded-2xl bg-white border border-gray-200 shadow-sm">
+    <div className="rounded-2xl bg-[var(--input)] border border-[var(--border)] shadow-sm">
       <div className="flex items-center gap-2 px-6 pt-6 pb-3">
-        <span className="text-gray-700">{icon}</span>
-        <h3 className="text-gray-800 font-semibold">{title}</h3>
+        <span className="text-[var(--muted)]">{icon}</span>
+        <h3 className="text-[var(--text)] font-semibold">{title}</h3>
       </div>
-      <div className="border-t border-gray-200/70" />
+      <div className="border-t border-[var(--border)]/70" />
       <div className="px-6 py-6">{children}</div>
     </div>
   );
@@ -116,7 +116,7 @@ export default function Step5Slide2({
         .no-scrollbar::-webkit-scrollbar { display: none; }
 
         .wave-loader { height: 46px; width: 46px; border-radius: 9999px; overflow: hidden;
-          border: 2px solid #d45427; background: #ffffff; position: relative; }
+          border: 2px solid #d45427; background: var(--input); position: relative; }
         .shine { position:absolute; top:2px; left:50%; transform:translateX(-50%); width:72%; height:26%;
           border-radius:0 0 9999px 9999px;
           background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.96), rgba(255,255,255,.2) 70%, transparent 80%);
@@ -129,7 +129,7 @@ export default function Step5Slide2({
         .layer-front { opacity:.98; animation: drift 5.6s linear infinite; }
 
         /* progress */
-        .progress-wrap { position:relative; height:10px; width:100%; border-radius:9999px; background:#e5e9f0; overflow:hidden; }
+        .progress-wrap { position:relative; height:10px; width:100%; border-radius:9999px; background: var(--border); overflow:hidden; }
         .progress-track {
           position:absolute; inset:0;
           background: linear-gradient(90deg, #d45427 0%, #ffa615 100%);
@@ -157,8 +157,8 @@ export default function Step5Slide2({
             <div className="max-w-[1120px] mx-auto pt-8">
               {/* Title */}
               <div className="text-center">
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Great! You’re all done.</h1>
-                <p className="mt-2 text-gray-600">
+                <h1 className="text-3xl md:text-4xl font-bold text-[var(--text)]">Great! You’re all done.</h1>
+                <p className="mt-2 text-[var(--muted)]">
                   Here is your <span className="font-semibold">entire report</span> based on your input.
                 </p>
               </div>
@@ -167,14 +167,14 @@ export default function Step5Slide2({
               <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                 <Card icon={<Briefcase size={18} />} title="Business Selected">
                   <div className="space-y-4">
-                    <div className="text-gray-700">{industry}</div>
+                    <div className="text-[var(--muted)]">{industry}</div>
                     {category && <Chip>{String(category)}</Chip>}
                   </div>
                 </Card>
 
                 <Card icon={<Languages size={18} />} title="Language Selected">
                   <div className="space-y-4">
-                    <div className="text-gray-700">{langSel.language || "English"}</div>
+                    <div className="text-[var(--muted)]">{langSel.language || "English"}</div>
                     {langSel.location && <Chip>{String(langSel.location)}</Chip>}
                   </div>
                 </Card>
@@ -184,7 +184,7 @@ export default function Step5Slide2({
                     {keywords.length ? (
                       keywords.map((k, i) => <Chip key={i}>{String(k)}</Chip>)
                     ) : (
-                      <span className="text-gray-500 text-sm">No keywords selected</span>
+                      <span className="text-[var(--muted)] text-sm">No keywords selected</span>
                     )}
                   </div>
                 </Card>
@@ -192,29 +192,29 @@ export default function Step5Slide2({
                 <Card icon={<Briefcase size={18} />} title="Competitors">
                   <div className="space-y-5">
                     <div>
-                      <div className="text-[12px] tracking-wide font-semibold text-gray-700">
+                      <div className="text-[12px] tracking-wide font-semibold text-[var(--muted)]">
                         BUSINESS COMPETITORS
                       </div>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {businessCompetitors.length ? (
                           businessCompetitors.map((c, i) => <Chip key={`biz-${i}`}>{String(c)}</Chip>)
                         ) : (
-                          <span className="text-gray-500 text-sm">None selected</span>
+                          <span className="text-[var(--muted)] text-sm">None selected</span>
                         )}
                       </div>
                     </div>
 
-                    <div className="border-t border-gray-200 my-1" />
+                    <div className="border-t border-[var(--border)] my-1" />
 
                     <div>
-                      <div className="text-[12px] tracking-wide font-semibold text-gray-700">
+                      <div className="text-[12px] tracking-wide font-semibold text-[var(--muted)]">
                         SEARCH ENGINE COMPETITORS
                       </div>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {searchCompetitors.length ? (
                           searchCompetitors.map((c, i) => <Chip key={`sea-${i}`}>{String(c)}</Chip>)
                         ) : (
-                          <span className="text-gray-500 text-sm">None selected</span>
+                          <span className="text-[var(--muted)] text-sm">None selected</span>
                         )}
                       </div>
                     </div>
@@ -228,8 +228,8 @@ export default function Step5Slide2({
               {/* Loader (appears after Dashboard click) */}
               {loading && (
                 <div className="mt-8 flex flex-col items-center">
-                  <p className="text-gray-700">Great things take time!</p>
-                  <p className="text-gray-600">
+                  <p className="text-[var(--muted)]">Great things take time!</p>
+                  <p className="text-[var(--muted)]">
                     Preparing your <span className="font-semibold">Dashboard</span>.
                   </p>
 
@@ -311,12 +311,12 @@ export default function Step5Slide2({
 
       {/* ---------------- Bottom bar ---------------- */}
       <div ref={bottomBarRef} className="flex-shrink-0 bg-transparent">
-        <div className="border-t border-gray-200" />
+        <div className="border-t border-[var(--border)]" />
         <div className="mx-auto w-full max-w-[1120px] px-6 md:px-8">
           <div className="py-7 flex justify-center gap-4">
             <button
               onClick={onBack}
-              className="inline-flex items-center gap-2 rounded-full bg-[image:var(--input)] px-6 py-3 text-[var(--text)] hover:bg-white shadow-sm border border-[#d45427]"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--input)] px-6 py-3 text-[var(--text)] hover:bg-[var(--input)] shadow-sm border border-[#d45427]"
             >
               <ArrowLeft size={16} /> Back
             </button>

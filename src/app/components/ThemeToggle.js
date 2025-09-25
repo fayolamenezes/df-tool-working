@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useTheme } from "./ThemeContext";
@@ -7,14 +8,18 @@ export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
 
-  // Sizes tuned to the reference PNGs
+  // Sizing tuned for a compact control
   const trackW = 84;
   const trackH = 40;
-  const thumb = 32;   // blue circle size
-  const pad = 4;      // inner padding inside track
-
-  // How far the thumb slides when going to the right side
+  const thumb = 32;
+  const pad = 4;
   const translateX = trackW - (thumb + pad * 2);
+  const topOffset = (trackH - thumb) / 2;
+
+  // Gradient with black veil. Uses CSS var if present, falls back to the requested colors.
+  const gradient =
+    "linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), " +
+    "var(--app-gradient-strong, linear-gradient(to right, #d45427 0%, #ffa615 100%))";
 
   return (
     <button
@@ -32,43 +37,38 @@ export default function ThemeToggle() {
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
       <div
-        className={[
-          "relative w-full h-full rounded-full border shadow-sm transition-colors",
-          // Track colors (match design)
-          isDark
-            ? "bg-[#6B7380] border-[#5d6571]"    // dark track
-            : "bg-[#E9EDF2] border-[#D8DEE6]",   // light track
-        ].join(" ")}
+        className="relative w-full h-full rounded-full bg-no-repeat bg-cover border shadow-sm"
+        style={{
+          backgroundImage: gradient,
+          borderColor: "rgba(0,0,0,0.35)",
+        }}
       >
-        {/* Left static icon (moon) */}
+        {/* Static icons (follow mode only): white in light, grey in dark */}
         <Moon
           size={18}
           className="absolute left-3 top-1/2 -translate-y-1/2"
-          // Muted gray like the mock
-          color={isDark ? "#C0C5CC" : "#AEB5BF"}
+          color={isDark ? "#A5A8B3" : "#FFFFFF"}
           strokeWidth={2}
         />
-
-        {/* Right static icon (sun) */}
         <Sun
           size={18}
           className="absolute right-3 top-1/2 -translate-y-1/2"
-          color={isDark ? "#C0C5CC" : "#AEB5BF"}
+          color={isDark ? "#A5A8B3" : "#FFFFFF"}
           strokeWidth={2}
         />
 
-        {/* Blue sliding thumb */}
+        {/* Sliding thumb: black background with the active icon in white */}
         <div
-          className="absolute top-1 left-1 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.25)] ring-1 ring-white/20
-                     flex items-center justify-center transition-transform duration-300 ease-out"
+          className="absolute rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.35)] ring-1 ring-white/20 flex items-center justify-center transition-transform duration-300 ease-out"
           style={{
             width: thumb,
             height: thumb,
+            top: topOffset,
+            left: pad,
             transform: `translateX(${isDark ? 0 : translateX}px)`,
-            background: "var(--infoHighlight-gradient)", // design blue
+            background: "#000000",
           }}
         >
-          {/* Icon inside the thumb (white) */}
           {isDark ? (
             <Moon size={16} color="#FFFFFF" strokeWidth={2} />
           ) : (

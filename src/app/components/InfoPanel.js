@@ -6,10 +6,10 @@ import { Pin, PinOff, BarChart2 } from "lucide-react";
 /* --- Reusable Website Stats card (exact same design everywhere) --- */
 function WebsiteStatsCard({ website, stats }) {
   return (
-    <div className="rounded-2xl bg-white border border-gray-200 shadow-sm p-5">
+    <div className="rounded-2xl bg-white border border-gray-200 shadow-sm p-5 dark:bg-[var(--extra-input-dark)] dark:border-[var(--extra-border-dark)]">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="text-[12px] tracking-wide text-gray-500 font-medium">
+        <div className="text-[12px] tracking-wide text-gray-500 dark:text-[var(--muted)] font-medium">
           WEBSITE :
           <span className="ml-2 text-[13px] font-semibold text-[#d45427]">{website}</span>
         </div>
@@ -19,8 +19,8 @@ function WebsiteStatsCard({ website, stats }) {
       </div>
 
       {/* Stats strip */}
-      <div className="mt-3 rounded-xl bg-[#F7F8FA] p-4">
-        <div className="flex items-stretch divide-x divide-gray-200">
+      <div className="mt-3 rounded-xl bg-white p-4 dark:bg-[var(--extra-input-dark)]">
+        <div className="flex items-stretch divide-x divide-gray-200 dark:divide-[var(--extra-border-dark)]">
           {[
             ["Domain Authority", stats.domainAuthority],
             ["Organic Traffic", stats.organicTraffic],
@@ -29,16 +29,20 @@ function WebsiteStatsCard({ website, stats }) {
             const parts = String(label).split(" ");
             return (
               <div key={idx} className="flex-1 px-6 text-center">
-                <div className="text-[13px] leading-[16px] text-gray-600 font-medium">
+                <div className="text-[13px] leading-[16px] text-gray-600 dark:text-[var(--muted)] font-medium">
                   {parts[0]}
                   <br />
                   {parts.slice(1).join(" ")}
                 </div>
                 <div className="mt-2 mb-1.5 flex items-center justify-center gap-2">
-                  <div className="text-[28px] leading-none font-extrabold text-gray-900">{value}</div>
-                  <span className="text-gray-400 text-[14px]">↓</span>
+                  <div className="text-[28px] leading-none font-extrabold text-gray-900 dark:text-[var(--text)]">{value}</div>
+                  {value >= 70 ? (
+                  <span className="text-emerald-400 text-[14px]">↑</span>
+                ) : (
+                  <span className="text-red-400 text-[14px]">↓</span>
+                )}
                 </div>
-                <div className="text-[13px] text-gray-500" suppressHydrationWarning>
+                <div className="text-[13px] text-gray-500 dark:text-[var(--muted)]" suppressHydrationWarning>
                   {Math.floor(Math.random() * (100 - 26 + 1)) + 26}
                 </div>
               </div>
@@ -131,18 +135,18 @@ export default function InfoPanel({
         <div className="divider-gradient-line h-[1px] w-[100%] bg-[image:var(--brand-gradient)] my-2 mb-5"></div>
       </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-3 mb-4">
+        <div className="bg-white rounded-lg shadow-sm p-3 mb-4 dark:bg-[var(--extra-input-dark)]">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <div className="text-sm font-semibold text-gray-800">
+              <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)]">
                 Domain Authority ({stats.domainAuthority})
               </div>
-              <div className="text-xs text-gray-500">Your site trust score (0–100)</div>
-              <div className="text-xs text-gray-500 mt-1">
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)]">Your site trust score (0–100)</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)] mt-1">
                 {stats.domainAuthority} = above average for SMBs
               </div>
             </div>
-            <div className="text-gray-400 cursor-help">?</div>
+            <div className="text-gray-400 dark:text-[var(--muted)] cursor-help">?</div>
           </div>
           <button className="mb-3 inline-block bg-[image:var(--infoHighlight-gradient)] text-white text-xs px-3 py-1 rounded font-medium">
             IMPROVE : BUILT QUALITY BACKLINKS
@@ -151,21 +155,21 @@ export default function InfoPanel({
             <div className="w-12 h-8 rounded bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
               DA
             </div>
-            <div className="text-sm text-gray-700">How to Build Domain Authority</div>
-            <div className="text-gray-400">⋯</div>
+            <div className="text-sm text-gray-700 dark:text-[var(--muted)]">How to Build Domain Authority</div>
+            <div className="text-gray-400 dark:text-[var(--muted)]">⋯</div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-3">
+        <div className="bg-white rounded-lg shadow-sm p-3 dark:bg-[var(--extra-input-dark)]">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <div className="text-sm font-semibold text-gray-800">
+              <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)]">
                 Organic Traffic ({stats.organicTraffic})
               </div>
-              <div className="text-xs text-gray-500">Monthly visits from free searches.</div>
-              <div className="text-xs text-gray-500 mt-1">{stats.organicTraffic} = visitors last month.</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)]">Monthly visits from free searches.</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)] mt-1">{stats.organicTraffic} = visitors last month.</div>
             </div>
-            <div className="text-gray-400 cursor-help">?</div>
+            <div className="text-gray-400 dark:text-[var(--muted)] cursor-help">?</div>
           </div>
           <div className="mb-3 inline-block bg-[image:var(--infoHighlight-gradient)] text-white text-xs px-3 py-1 rounded">
             Each organic visitor costs $0 vs $2–5 for ads.
@@ -174,8 +178,8 @@ export default function InfoPanel({
             <div className="w-12 h-8 rounded bg-green-600 flex items-center justify-center text-white text-xs font-bold">
               TR
             </div>
-            <div className="text-sm text-gray-700">Turn Traffic Into Customers</div>
-            <div className="text-gray-400">⋯</div>
+            <div className="text-sm text-gray-700 dark:text-[var(--muted)]">Turn Traffic Into Customers</div>
+            <div className="text-gray-400 dark:text-[var(--muted)]">⋯</div>
           </div>
         </div>
       </div>
@@ -195,16 +199,16 @@ export default function InfoPanel({
         </div>
 
         {/* (unchanged) cards/content */}
-        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4">
+        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4 dark:bg-[var(--extra-input-dark)]">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <div className="text-sm font-semibold text-gray-800">Why Industry Matters</div>
-              <div className="text-xs text-gray-500 mt-1">• Personalized Benchmarks vs. relevant peers</div>
+              <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)]">Why Industry Matters</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)] mt-1">• Personalized Benchmarks vs. relevant peers</div>
             </div>
-            <div className="text-gray-400 cursor-help">?</div>
+            <div className="text-gray-400 dark:text-[var(--muted)] cursor-help">?</div>
           </div>
           <div className="mt-3">
-            <div className="text-xs text-gray-600 mb-2">Keyword suggestion</div>
+            <div className="text-xs text-gray-600 dark:text-[var(--muted)] mb-2">Keyword suggestion</div>
             <div className="flex gap-2 flex-wrap">
               <span className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded">KEYWORD-1</span>
               <span className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded">KEYWORD-2</span>
@@ -215,63 +219,63 @@ export default function InfoPanel({
             <div className="w-12 h-8 rounded bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
               SEO
             </div>
-            <div className="text-sm text-gray-700">Industry SEO Strategies</div>
-            <div className="text-gray-400">⋯</div>
+            <div className="text-sm text-gray-700 dark:text-[var(--muted)]">Industry SEO Strategies</div>
+            <div className="text-gray-400 dark:text-[var(--muted)]">⋯</div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4">
+        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4 dark:bg-[var(--extra-input-dark)]">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <div className="text-sm font-semibold text-gray-800">Business Type Impact</div>
-              <div className="text-xs text-gray-500 mt-1">• Local vs. national focus</div>
-              <div className="text-xs text-gray-500">• Content and customer journey differences</div>
+              <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)]">Business Type Impact</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)] mt-1">• Local vs. national focus</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)]">• Content and customer journey differences</div>
             </div>
-            <div className="text-gray-400 cursor-help">?</div>
+            <div className="text-gray-400 dark:text-[var(--muted)] cursor-help">?</div>
           </div>
           <div className="flex items-center gap-3 mt-3">
             <div className="w-12 h-8 rounded bg-green-600 flex items-center justify-center text-white text-xs font-bold">
               DA
             </div>
-            <div className="text-sm text-gray-700">How to Build Domain Authority</div>
-            <div className="text-gray-400">⋯</div>
+            <div className="text-sm text-gray-700 dark:text-[var(--muted)]">How to Build Domain Authority</div>
+            <div className="text-gray-400 dark:text-[var(--muted)]">⋯</div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4">
+        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4 dark:bg-[var(--extra-input-dark)]">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <div className="text-sm font-semibold text-gray-800">Competitive Analysis</div>
-              <div className="text-xs text-gray-500 mt-1">• Compare with industry leaders</div>
-              <div className="text-xs text-gray-500">• Identify content gaps</div>
+              <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)]">Competitive Analysis</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)] mt-1">• Compare with industry leaders</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)]">• Identify content gaps</div>
             </div>
-            <div className="text-gray-400 cursor-help">?</div>
+            <div className="text-gray-400 dark:text-[var(--muted)] cursor-help">?</div>
           </div>
           <div className="flex items-center gap-3 mt-3">
             <div className="w-12 h-8 rounded bg-purple-600 flex items-center justify-center text-white text-xs font-bold">
               CA
             </div>
-            <div className="text-sm text-gray-700">Competitor Research Tools</div>
-            <div className="text-gray-400">⋯</div>
+            <div className="text-sm text-gray-700 dark:text-[var(--muted)]">Competitor Research Tools</div>
+            <div className="text-gray-400 dark:text-[var(--muted)]">⋯</div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border shadow-sm p-3">
+        <div className="bg-white rounded-lg border shadow-sm p-3 dark:bg-[var(--extra-input-dark)]">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <div className="text-sm font-semibold text-gray-800">Content Strategy</div>
-              <div className="text-xs text-gray-500 mt-1">• Industry-specific content ideas</div>
-              <div className="text-xs text-gray-500">• Content calendar planning</div>
-              <div className="text-xs text-gray-500">• SEO optimization tips</div>
+              <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)]">Content Strategy</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)] mt-1">• Industry-specific content ideas</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)]">• Content calendar planning</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)]">• SEO optimization tips</div>
             </div>
-            <div className="text-gray-400 cursor-help">?</div>
+            <div className="text-gray-400 dark:text-[var(--muted)] cursor-help">?</div>
           </div>
           <div className="flex items-center gap-3 mt-3">
             <div className="w-12 h-8 rounded bg-indigo-600 flex items-center justify-center text-white text-xs font-bold">
               CS
             </div>
-            <div className="text-sm text-gray-700">Content Planning Guide</div>
-            <div className="text-gray-400">⋯</div>
+            <div className="text-sm text-gray-700 dark:text-[var(--muted)]">Content Planning Guide</div>
+            <div className="text-gray-400 dark:text-[var(--muted)]">⋯</div>
           </div>
         </div>
       </div>
@@ -294,30 +298,30 @@ export default function InfoPanel({
 <div className="place-items-center flex justify-center">
         <div className="divider-gradient-line h-[1px] w-[100%] bg-[image:var(--brand-gradient)] my-2 mb-5"></div>
       </div>
-        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4">
+        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4 dark:bg-[var(--extra-input-dark)]">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <div className="text-sm font-semibold text-gray-800">Local SEO Power</div>
-              <div className="text-xs text-gray-500 mt-1">76% of local searches lead to store visits</div>
+              <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)]">Local SEO Power</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)] mt-1">76% of local searches lead to store visits</div>
             </div>
-            <div className="text-gray-400 cursor-help">?</div>
+            <div className="text-gray-400 dark:text-[var(--muted)] cursor-help">?</div>
           </div>
           <div className="flex items-center gap-3 mt-3">
             <div className="w-12 h-8 rounded bg-red-600 flex items-center justify-center text-white text-xs font-bold">
               DA
             </div>
-            <div className="text-sm text-gray-700">Dominate Local Search</div>
-            <div className="text-gray-400">⋯</div>
+            <div className="text-sm text-gray-700 dark:text-[var(--muted)]">Dominate Local Search</div>
+            <div className="text-gray-400 dark:text-[var(--muted)]">⋯</div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4">
+        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4 dark:bg-[var(--extra-input-dark)]">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <div className="text-sm font-semibold text-gray-800">Language Strategy</div>
-              <div className="text-xs text-gray-500 mt-1">• Match customers search language</div>
+              <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)]">Language Strategy</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)] mt-1">• Match customers search language</div>
             </div>
-            <div className="text-gray-400 cursor-help">?</div>
+            <div className="text-gray-400 dark:text-[var(--muted)] cursor-help">?</div>
           </div>
           <div className="mb-3 inline-block bg-yellow-300 text-black text-xs px-3 py-1 rounded">
             Less competition in non-English terms
@@ -326,32 +330,32 @@ export default function InfoPanel({
             <div className="w-12 h-8 rounded bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
               SEO
             </div>
-            <div className="text-sm text-gray-700">Multi-Language SEO</div>
-            <div className="text-gray-400">⋯</div>
+            <div className="text-sm text-gray-700 dark:text-[var(--muted)]">Multi-Language SEO</div>
+            <div className="text-gray-400 dark:text-[var(--muted)]">⋯</div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border shadow-sm p-3">
+        <div className="bg-white rounded-lg border shadow-sm p-3 dark:bg-[var(--extra-input-dark)]">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <div className="text-sm font-semibold text-gray-800">Location Guide</div>
-              <div className="text-xs text-gray-500 mt-1">• Map service areas</div>
+              <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)]">Location Guide</div>
+              <div className="text-xs text-gray-500 dark:text-[var(--muted)] mt-1">• Map service areas</div>
             </div>
-            <div className="text-gray-400 cursor-help">?</div>
+            <div className="text-gray-400 dark:text-[var(--muted)] cursor-help">?</div>
           </div>
           <div className="flex items-center gap-3 mt-3">
             <div className="w-12 h-8 rounded bg-green-600 flex items-center justify-center text-white text-xs font-bold">
               LG
             </div>
-            <div className="text-sm text-gray-700">Location Optimization</div>
-            <div className="text-gray-400">⋯</div>
+            <div className="text-sm text-gray-700 dark:text-[var(--muted)]">Location Optimization</div>
+            <div className="text-gray-400 dark:text-[var(--muted)]">⋯</div>
           </div>
         </div>
       </div>
 
       {keywordData.length > 0 && (
-        <div className="bg-white rounded-lg p-4 shadow-sm border mt-4">
-          <div className="text-xs text-gray-600 font-medium mb-2">
+        <div className="bg-white rounded-lg p-4 shadow-sm border mt-4 dark:bg-[var(--extra-input-dark)]">
+          <div className="text-xs text-gray-600 dark:text-[var(--muted)] font-medium mb-2">
             Selected Keywords ({keywordData.length})
           </div>
           <div className="flex flex-wrap gap-2">
@@ -384,11 +388,11 @@ export default function InfoPanel({
         <div className="divider-gradient-line h-[1px] w-[100%] bg-[image:var(--brand-gradient)] my-2 mb-5"></div>
       </div>
 
-        <div className="bg-white rounded-lg border shadow-sm p-4 mb-4 flex items-center gap-3">
+        <div className="bg-white rounded-lg border shadow-sm p-4 mb-4 flex items-center gap-3 dark:bg-[var(--extra-input-dark)]">
           <div className="w-9 h-9 flex items-center justify-center rounded bg-blue-600 text-white font-bold">i</div>
           <div className="flex-1">
-            <div className="font-medium text-gray-900">Keyword Fundamentals</div>
-            <div className="text-xs text-gray-500">What keywords are &amp; why they matter</div>
+            <div className="font-medium text-gray-900 dark:text-[var(--text)]">Keyword Fundamentals</div>
+            <div className="text-xs text-gray-500 dark:text-[var(--muted)]">What keywords are &amp; why they matter</div>
             <div className="flex flex-wrap gap-2 mb-2 my-4">
               {keywordData.slice(0, 6).map((kw, i) => (
                 <span
@@ -407,13 +411,13 @@ export default function InfoPanel({
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border shadow-sm p-4 mb-4 flex items-center gap-3">
+        <div className="bg-white rounded-lg border shadow-sm p-4 mb-4 flex items-center gap-3 dark:bg-[var(--extra-input-dark)]">
           <div className="w-9 h-9 flex items-center justify-center rounded bg-green-600 text-white font-bold">
             &#x2261;
           </div>
           <div className="flex-1">
-            <div className="font-medium text-gray-900">Volume &amp; Competition</div>
-            <div className="text-xs text-gray-500">
+            <div className="font-medium text-gray-900 dark:text-[var(--text)]">Volume &amp; Competition</div>
+            <div className="text-xs text-gray-500 dark:text-[var(--muted)]">
               Match industry volume &amp; competition
               <br />
               <span className="font-bold text-green-600">100–1,000 searches = sweet spot</span>
@@ -421,13 +425,13 @@ export default function InfoPanel({
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border shadow-sm p-4 flex items-center gap-3">
+        <div className="bg-white rounded-lg border shadow-sm p-4 flex items-center gap-3 dark:bg-[var(--extra-input-dark)]">
           <div className="w-9 h-9 flex items-center justify-center rounded bg-purple-600 text-white font-bold">
             &#x270E;
           </div>
           <div className="flex-1">
-            <div className="font-medium text-gray-900">Customer Language</div>
-            <div className="text-xs text-gray-500">
+            <div className="font-medium text-gray-900 dark:text-[var(--text)]">Customer Language</div>
+            <div className="text-xs text-gray-500 dark:text-[var(--muted)]">
               Use words your customers actually search.
               <br />
               Think like your buyer, not like your business.
@@ -457,8 +461,8 @@ export default function InfoPanel({
         {hasAny ? (
           <>
             {businessCompetitors?.length > 0 && (
-              <div className="bg-white rounded-lg p-4 shadow-sm border">
-                <div className="text-xs text-gray-600 font-medium mb-2">
+              <div className="bg-white rounded-lg p-4 shadow-sm border dark:bg-[var(--extra-input-dark)]">
+                <div className="text-xs text-gray-600 dark:text-[var(--muted)] font-medium mb-2">
                   Selected Business Competitors ({businessCompetitors.length})
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -475,8 +479,8 @@ export default function InfoPanel({
             )}
 
             {searchCompetitors?.length > 0 && (
-              <div className="bg-white rounded-lg p-4 shadow-sm border">
-                <div className="text-xs text-gray-600 font-medium mb-2">
+              <div className="bg-white rounded-lg p-4 shadow-sm border dark:bg-[var(--extra-input-dark)]">
+                <div className="text-xs text-gray-600 dark:text-[var(--muted)] font-medium mb-2">
                   Selected Search Engine Competitors ({searchCompetitors.length})
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -493,8 +497,8 @@ export default function InfoPanel({
             )}
 
             {totalCompetitors?.length > 0 && businessCompetitors.length === 0 && searchCompetitors.length === 0 && (
-              <div className="bg-white rounded-lg p-4 shadow-sm border">
-                <div className="text-xs text-gray-600 font-medium mb-2">
+              <div className="bg-white rounded-lg p-4 shadow-sm border dark:bg-[var(--extra-input-dark)]">
+                <div className="text-xs text-gray-600 dark:text-[var(--muted)] font-medium mb-2">
                   Selected Competitors ({totalCompetitors.length})
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -524,14 +528,14 @@ export default function InfoPanel({
             <h4 className="text-sm font-bold text-gray-800">NEXT ACTIONS</h4>
           </div>
 
-          <div className="bg-white rounded-lg border shadow-sm p-3 mb-3">
-            <div className="text-sm font-semibold text-gray-800 mb-1">Benchmark Against Competitors</div>
-            <div className="text-xs text-gray-500">Compare domain authority and content depth.</div>
+          <div className="bg-white rounded-lg border shadow-sm p-3 mb-3 dark:bg-[var(--extra-input-dark)]">
+            <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)] mb-1">Benchmark Against Competitors</div>
+            <div className="text-xs text-gray-500 dark:text-[var(--muted)]">Compare domain authority and content depth.</div>
           </div>
 
-          <div className="bg-white rounded-lg border shadow-sm p-3">
-            <div className="text-sm font-semibold text-gray-800 mb-1">Content Gaps</div>
-            <div className="text-xs text-gray-500">Identify topics your competitors rank for that you don’t.</div>
+          <div className="bg-white rounded-lg border shadow-sm p-3 dark:bg-[var(--extra-input-dark)]">
+            <div className="text-sm font-semibold text-gray-800 dark:text-[var(--text)] mb-1">Content Gaps</div>
+            <div className="text-xs text-gray-500 dark:text-[var(--muted)]">Identify topics your competitors rank for that you don’t.</div>
           </div>
         </div>
       </div>
@@ -546,9 +550,9 @@ export default function InfoPanel({
   );
 
   const MiniCard = ({ title, children }) => (
-    <div className="rounded-xl bg-white shadow-sm border border-gray-200 px-4 py-4">
-      <div className="text-gray-700 font-semibold text-sm">{title}</div>
-      <div className="mt-2 h-px bg-gray-200" />
+    <div className="rounded-xl bg-white shadow-sm border border-gray-200 px-4 py-4 dark:bg-[var(--extra-input-dark)] dark:border-[var(--extra-border-dark)]">
+      <div className="text-gray-700 dark:text-[var(--muted)] font-semibold text-sm">{title}</div>
+      <div className="mt-2 h-px bg-gray-200 dark:bg-[var(--extra-border-dark)]" />
       <div className="mt-4 space-y-3">{children}</div>
     </div>
   );
@@ -565,11 +569,11 @@ export default function InfoPanel({
 
     return (
       <div className="space-y-3">
-        <div className="text-xs font-medium text-gray-500">Summary</div>
+        <div className="text-xs font-medium text-gray-500 dark:text-[var(--muted)]">Summary</div>
 
         <div className="grid grid-cols-1 gap-3">
           <MiniCard title="Business Selected">
-            <div className="text-xs text-gray-500">{bizTitle}</div>
+            <div className="text-xs text-gray-500 dark:text-[var(--muted)]">{bizTitle}</div>
             <div className="flex flex-wrap gap-2">
               {(bComp.length ? bComp.slice(0, 2) : ["KEYWORD-1"]).map((v, i) => (
                 <Pill key={`mini-b-${i}`}>{String(v).toUpperCase()}</Pill>
@@ -578,8 +582,8 @@ export default function InfoPanel({
           </MiniCard>
 
           <MiniCard title="Language Selected">
-            <div className="text-xs text-gray-600">{lang}</div>
-            {state && <div className="text-xs text-gray-500">{state}</div>}
+            <div className="text-xs text-gray-600 dark:text-[var(--muted)]">{lang}</div>
+            {state && <div className="text-xs text-gray-500 dark:text-[var(--muted)]">{state}</div>}
             {city && <Pill>{String(city).toUpperCase()}</Pill>}
           </MiniCard>
 
@@ -592,7 +596,7 @@ export default function InfoPanel({
           </MiniCard>
 
           <MiniCard title="Business Selected">
-            <div className="text-xs text-gray-500">{bizTitle}</div>
+            <div className="text-xs text-gray-500 dark:text-[var(--muted)]">{bizTitle}</div>
             <div className="flex flex-wrap gap-2">
               {(sComp.length ? sComp.slice(0, 1) : ["COMP-1"]).map((c, i) => (
                 <Pill key={`mini-b2-${i}`}>{String(c).toUpperCase()}</Pill>
@@ -601,7 +605,7 @@ export default function InfoPanel({
           </MiniCard>
         </div>
 
-        <div className="h-px bg-gray-200 my-3" />
+        <div className="h-px bg-gray-200 dark:bg-[var(--extra-border-dark)] my-3" />
 
         {renderStep5Content()}
       </div>
@@ -609,7 +613,11 @@ export default function InfoPanel({
   };
 
   return (
-    <div
+    <>
+      {/* Dark-only full-viewport gradient (non-blocking) */}
+      <div className="hidden dark:block fixed inset-0 -z-10 pointer-events-none bg-no-repeat bg-cover"
+           style={{ backgroundImage: "linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), var(--app-gradient-strong)" }} />
+      <div
       ref={panelRef}
       aria-hidden={!isOpen}
       className={
@@ -621,11 +629,11 @@ export default function InfoPanel({
       <div className="flex items-center justify-between px-4 pt-6 bg-transparent">
         <div className="flex items-center gap-3">
           <BarChart2 className="text-[#111827]" size={26} />
-          <h3 className="text-xl font-black text-[#111827]">INFO</h3>
+          <h3 className="text-xl font-black text-[#111827] dark:text-[var(--text)]">INFO</h3>
         </div>
         <button
           onClick={() => setIsPinned((p) => !p)}
-          className="text-[#111827] hover:text-[#D45427] rounded font-bold"
+          className="text-[#111827] hover:text-[#D45427] rounded font-bold dark:text-[var(--text)]"
           title={isPinned ? "Unpin panel" : "Pin panel"}
         >
           {isPinned ? <PinOff size={20}/> : <Pin size={20} />}
@@ -655,5 +663,6 @@ export default function InfoPanel({
           : renderStep5Content()}
       </div>
     </div>
+      </>
   );
 }
